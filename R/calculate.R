@@ -1,6 +1,9 @@
+library(yaml)
 library(RMySQL)
 
-conn <- dbConnect(dbDriver("MySQL"), host = "127.0.0.1", dbname = "testdb", user = "user", password = "password")
+dbConfig <- yaml.load_file("database.yml")
+conn <- do.call(dbConnect, c(dbDriver("MySQL"), dbConfig))
+
 dat <- dbReadTable(conn, "test_data")
 sma <- na.omit(filter(dat$value, rep(1:1, 25)))
 
